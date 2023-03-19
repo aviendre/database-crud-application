@@ -186,7 +186,56 @@
         <h2>
             Read Operation
         </h2>
-        <h3>PLACEHOLDER</h3>
+        <h3>Get user via user ID</h3>
+        <form method="post" action="read_query.php">
+            <label for="user_id">Enter User ID:</label>
+            <input type="text" id="user_id" name="user_id">
+            <input type="submit" name="get_all_data_from_user_id" value="Find">
+        </form>
+
+        <h3>Get user via first name</h3>
+        <form method="post" action="read_query.php">
+            <label for="first_name">Enter First Name:</label>
+            <input type="text" id="first_name" name="first_name">
+            <input type="submit" name="get_all_data_from_first_name" value="Find">
+        </form>
+
+        <h3>Get user via last name</h3>
+        <form method="post" action="read_query.php">
+            <label for="last_name">Enter Last Name:</label>
+            <input type="text" id="last_name" name="last_name">
+            <input type="submit" name="get_all_data_from_last_name" value="Find">
+        </form>
+
+        <h3>Get user via email</h3>
+        <form method="post" action="read_query.php">
+            <label for="email">Enter Email:</label>
+            <input type="text" id="email" name="email">
+            <input type="submit" name="get_all_data_from_email" value="Find">
+        </form>
+
+
+        <h3>Get user via last resort</h3>
+
+
+        <h3>Get user purchases via user ID</h3>
+
+
+        <h3>Get user purchases via date</h3>
+
+
+        <h3>Get user purchases via year</h3>
+
+
+        <h3>Get event from venue</h3>
+
+
+        <h3>Get event and venue</h3>
+
+
+        <h3>Get total number of tickers in venue</h3>
+
+
     </div>
 
     <div>
