@@ -1,0 +1,20 @@
+cd into your file path
+
+docker run --name=amazon-db -p3306:3306 -v mysql-volume:<WSL Mount> -e MYSQL_ROOT_PASSWORD=password -d mysql/mysql-server
+
+docker cp allusers_pipe.txt amazon-db:/var/lib/mysql-files
+docker cp allevents_pipe.txt amazon-db:/var/lib/mysql-files
+docker cp category_pipe.txt amazon-db:/var/lib/mysql-files
+docker cp date2008_pipe.txt amazon-db:/var/lib/mysql-files
+docker cp listings_pipe.txt amazon-db:/var/lib/mysql-files
+docker cp sales_tab.txt amazon-db:/var/lib/mysql-files
+docker cp venue_pipe.txt amazon-db:/var/lib/mysql-files
+
+docker exec -it amazon-db bash
+
+mysql -u root -p
+password
+
+update mysql.user set host = '%' where user='root';  
+flush privileges;
+exit
