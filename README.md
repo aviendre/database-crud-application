@@ -5,3 +5,4 @@
 2. copy and move the ```crud``` folder into xamp/htdocs
 3. start apache and mysql
 4. product can be accessible via ```http://localhost/crud/database.php```
+5. phpMyAdmin can be accessed via ```http://localhost/phpmyadmin```
