@@ -12,7 +12,7 @@ function execute_query($conn, $sql)
 // SQL queries to create the tables
 $sql_users = "create table if not exists users
 (
-    userid        integer not null PRIMARY KEY,
+    userid        integer not null PRIMARY KEY AUTO_INCREMENT,
     username      char(8),
     firstname     varchar(30),
     lastname      varchar(30),
@@ -34,7 +34,7 @@ $sql_users = "create table if not exists users
 
 $sql_venue = "create table if not exists venue
 (
-    venueid    smallint not null PRIMARY KEY,
+    venueid    smallint not null PRIMARY KEY AUTO_INCREMENT,
     venuename  varchar(100),
     venuecity  varchar(30),
     venuestate char(2),
@@ -43,7 +43,7 @@ $sql_venue = "create table if not exists venue
 
 $sql_category = "create table if not exists category
 (
-    catid    smallint not null PRIMARY KEY,
+    catid    smallint not null PRIMARY KEY AUTO_INCREMENT,
     catgroup varchar(10),
     catname  varchar(10),
     catdesc  varchar(50)
@@ -51,7 +51,7 @@ $sql_category = "create table if not exists category
 
 $sql_date = "create table if not exists date
 (
-    dateid  smallint     not null PRIMARY KEY,
+    dateid  smallint     not null PRIMARY KEY AUTO_INCREMENT,
     caldate date         not null,
     day     character(3) not null,
     week    smallint     not null,
@@ -63,7 +63,7 @@ $sql_date = "create table if not exists date
 
 $sql_event = "CREATE TABLE if not exists event
 (
-    eventid   INT      NOT NULL PRIMARY KEY,
+    eventid   INT      NOT NULL PRIMARY KEY AUTO_INCREMENT,
     venueid   SMALLINT NOT NULL,
     catid     SMALLINT NOT NULL,
     dateid    SMALLINT NOT NULL,
@@ -73,7 +73,7 @@ $sql_event = "CREATE TABLE if not exists event
 
 $sql_listing = "create table if not exists listing
 (
-    listid         integer  not null PRIMARY KEY,
+    listid         integer  not null PRIMARY KEY AUTO_INCREMENT,
     sellerid       integer  not null,
     eventid        integer  not null,
     dateid         smallint not null,
@@ -85,7 +85,7 @@ $sql_listing = "create table if not exists listing
 
 $sql_sales = "create table if not exists sales
 (
-    salesid    integer  not null PRIMARY KEY,
+    salesid    integer  not null PRIMARY KEY AUTO_INCREMENT,
     listid     integer  not null,
     sellerid   integer  not null,
     buyerid    integer  not null,

@@ -48,7 +48,13 @@
                     $date_id = $row['dateid'];
 
                     // Update event price
-                    $query = "UPDATE listing SET priceperticket = $price WHERE eventid IN (SELECT eventid FROM event WHERE venueid = $venue_id AND dateid = $date_id)";
+                    $query = "UPDATE listing 
+                    SET priceperticket = $price 
+                    WHERE eventid IN 
+                        (SELECT eventid 
+                        FROM event 
+                        WHERE venueid = $venue_id 
+                        AND dateid = $date_id)";
                     $result = mysqli_query($conn, $query);
 
                     // Check if query is successful
@@ -64,6 +70,32 @@
                 echo "Error: Venue not found.";
             }
         }
+
+        if (isset($_POST['update_price_specific_event'])) {
+            // Get the form data
+            $event_name = $_POST['event_name'];
+            $new_price = $_POST['new_price'];
+
+            // Run the SQL query to update the listing with the new price and total price
+            $sql = "UPDATE listing 
+            SET priceperticket = $new_price, totalprice = numtickets * $new_price 
+            WHERE eventid = (SELECT eventid 
+                            FROM event 
+                            WHERE eventname = '$event_name');";
+
+            // Execute the query
+            $result = mysqli_query($conn, $sql);
+
+            // Check if the query was successful
+            if ($result) {
+                // Display a success message
+                echo "Listing updated successfully!";
+            } else {
+                // Display an error message
+                echo "Error updating listing: " . mysqli_error($conn);
+            }
+        }
+
         $end_time = microtime(true);
         $execution_time = round(($end_time - $start_time) * 1000, 2); // Calculate the execution time in milliseconds
         echo "<br> Function completed in $execution_time ms";

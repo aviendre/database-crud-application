@@ -91,12 +91,11 @@
                 echo "</table>";
             } else {
                 // Display a message if no rows were returned
-                echo "No user data found for user ID: $first_name";
+                echo "No user data found for user first name: $first_name";
             }
         }
 
         if (isset($_POST['get_all_data_from_last_name'])) {
-            //SELECT * FROM users WHERE lastname = 'last_name';
             $last_name = $_POST['last_name'];
 
             // Run the SQL query to retrieve all user data based on user ID
@@ -127,12 +126,11 @@
                 echo "</table>";
             } else {
                 // Display a message if no rows were returned
-                echo "No user data found for user ID: $last_name";
+                echo "No user data found for user last name: $last_name";
             }
         }
 
         if (isset($_POST['get_all_data_from_email'])) {
-            //SELECT * FROM users WHERE email = 'user_email';
             $user_email = $_POST['email'];
 
             // Run the SQL query to retrieve all user data based on user ID
@@ -163,45 +161,262 @@
                 echo "</table>";
             } else {
                 // Display a message if no rows were returned
-                echo "No user data found for user ID: $user_email";
+                echo "No user data found for user email: $user_email";
             }
         }
 
         if (isset($_POST['get_all_data_from_options'])) {
-            //SELECT * FROM users WHERE firstname = 'first_name' OR lastname = 'last_name' OR email = 'user_email';
+            $_POST['first_name'] ? $first_name = $_POST['first_name'] : $first_name = "empty";
+            $_POST['last_name'] ? $last_name = $_POST['last_name'] : $last_name = "empty";
+            $_POST['email'] ? $user_email = mysqli_real_escape_string($conn, $_POST['email']) : $user_email = "empty";
+
+            // Run the SQL query to retrieve all user data based on user ID
+            $sql = "SELECT * FROM users WHERE firstname = '$first_name' OR lastname = '$last_name' OR email = '$user_email'";
+
+            // Execute the query
+            $result = mysqli_query($conn, $sql);
+
+            // Check if any rows were returned
+            if (mysqli_num_rows($result) > 0) {
+                // Display the user data in a table
+                echo "<table class='table'>";
+                echo "<thead><tr><th>User ID</th><th>Username</th><th>First Name</th><th>Last Name</th><th>City</th><th>State</th><th>Email</th><th>Phone</th></tr></thead>";
+                echo "<tbody>";
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo "<tr>";
+                    echo "<td>" . $row['userid'] . "</td>";
+                    echo "<td>" . $row['username'] . "</td>";
+                    echo "<td>" . $row['firstname'] . "</td>";
+                    echo "<td>" . $row['lastname'] . "</td>";
+                    echo "<td>" . $row['city'] . "</td>";
+                    echo "<td>" . $row['state'] . "</td>";
+                    echo "<td>" . $row['email'] . "</td>";
+                    echo "<td>" . $row['phone'] . "</td>";
+                    echo "</tr>";
+                }
+                echo "</tbody>";
+                echo "</table>";
+            } else {
+                // Display a message if no rows were returned
+                echo "No user data found for user first name: $first_name
+                <br> No user data found for user last name: $last_name
+                <br> No user data found for user email: $user_email";
+            }
         }
 
         if (isset($_POST['get_purchases_from_user_id'])) {
-            //select u.firstname, u.lastname, s.salesid from user u, sales s where s.buyerid = u.userid and u.userid = 'userid';
+            $user_id = $_POST['user_id'];
+
+            // Run the SQL query to retrieve all user data based on user ID
+            $sql = "select u.username, u.firstname, u.lastname, s.salesid, e.eventname
+            from users u, sales s, event e 
+            where s.buyerid = u.userid 
+            and s.eventid = e.eventid
+            and u.userid = '$user_id'";
+
+            // Execute the query
+            $result = mysqli_query($conn, $sql);
+
+            // Check if any rows were returned
+            if (mysqli_num_rows($result) > 0) {
+                // Display the user data in a table
+                echo "<table class='table'>";
+                echo "<thead><tr><th>Username</th><th>First Name</th><th>Last Name</th><th>Sales ID</th><th>Event Name</th></tr></thead>";
+                echo "<tbody>";
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo "<tr>";
+                    echo "<td>" . $row['username'] . "</td>";
+                    echo "<td>" . $row['firstname'] . "</td>";
+                    echo "<td>" . $row['lastname'] . "</td>";
+                    echo "<td>" . $row['salesid'] . "</td>";
+                    echo "<td>" . $row['eventname'] . "</td>";
+                    echo "</tr>";
+                }
+                echo "</tbody>";
+                echo "</table>";
+            } else {
+                // Display a message if no rows were returned
+                echo "No user data found for user ID: $user_id";
+            }
         }
 
         if (isset($_POST['get_purchases_from_user_id_on_date'])) {
-            //select u.firstname, u.lastname, s.salesid from user u, sales s, date d 
-            //where s.buyerid = u.userid and s.dateid = d.dateid and d.caldate = 'userdate';
+            $user_id = $_POST['user_id'];
+            $date = $_POST['date'];
+
+            // Run the SQL query to retrieve all user data based on user ID
+            $sql = "select u.firstname, u.lastname, s.salesid, e.eventname, d.caldate 
+            from users u, sales s, date d, event e
+            where s.buyerid = u.userid 
+            and s.eventid = e.eventname
+            and s.dateid = d.dateid 
+            and u.userid = '$user_id'
+            and d.caldate = '$date';";
+
+            // Execute the query
+            $result = mysqli_query($conn, $sql);
+
+            // Check if any rows were returned
+            if (mysqli_num_rows($result) > 0) {
+                // Display the user data in a table
+                echo "<table class='table'>";
+                echo "<thead><tr><th>Username</th><th>First Name</th><th>Last Name</th><th>Sales ID</th><th>Event Name</th><th>Date</th></tr></thead>";
+                echo "<tbody>";
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo "<tr>";
+                    echo "<td>" . $row['username'] . "</td>";
+                    echo "<td>" . $row['firstname'] . "</td>";
+                    echo "<td>" . $row['lastname'] . "</td>";
+                    echo "<td>" . $row['salesid'] . "</td>";
+                    echo "<td>" . $row['eventname'] . "</td>";
+                    echo "<td>" . $row['caldate'] . "</td>";
+                    echo "</tr>";
+                }
+                echo "</tbody>";
+                echo "</table>";
+            } else {
+                // Display a message if no rows were returned
+                echo "No user data found for user ID: $user_id
+                <br> on $date";
+            }
         }
 
         if (isset($_POST['get_purchases_from_user_id_and_year'])) {
-            //SELECT u.firstname, u.lastname, s.salesid from user u, sales s, date d
-            //where s.buyerid = u.userid and s.dateid = d.dateid and d.year = 'year';
+            $user_id = $_POST['user_id'];
+            $year = $_POST['year'];
+
+            // Run the SQL query to retrieve all user data based on user ID
+            $sql = "SELECT u.username, u.firstname, u.lastname, s.salesid, e.eventname, d.year 
+            from users u, sales s, date d, event e
+            where s.buyerid = u.userid 
+            and s.eventid = e.eventid
+            and s.dateid = d.dateid
+            and u.userid = '$user_id' 
+            and d.year = '$year';";
+
+            // Execute the query
+            $result = mysqli_query($conn, $sql);
+
+            // Check if any rows were returned
+            if (mysqli_num_rows($result) > 0) {
+                // Display the user data in a table
+                echo "<table class='table'>";
+                echo "<thead><tr><th>Username</th><th>First Name</th><th>Last Name</th><th>Sales ID</th><th>Event Name</th><th>Year</th></tr></thead>";
+                echo "<tbody>";
+                $counter = 0;
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo "<tr>";
+                    echo "<td>" . $row['username'] . "</td>";
+                    echo "<td>" . $row['firstname'] . "</td>";
+                    echo "<td>" . $row['lastname'] . "</td>";
+                    echo "<td>" . $row['salesid'] . "</td>";
+                    echo "<td>" . $row['eventname'] . "</td>";
+                    echo "<td>" . $row['year'] . "</td>";
+                    echo "</tr>";
+                    $counter++;
+                    if ($counter > 50)
+                        break;
+                }
+                echo "</tbody>";
+                echo "</table>";
+            } else {
+                // Display a message if no rows were returned
+                echo "No user data found for user ID: $user_id";
+            }
         }
 
         if (isset($_POST['get_all_events_in_venue'])) {
-            //select e.eventname from event e, venue v 
-            //where e.venueid = v.venueid and v.venueid = 'venue';
+
+            $venuename = $_POST['venuename'];
+
+            // Run the SQL query to retrieve all user data based on user ID
+            $sql = "select e.eventname, v.venuename 
+            from event e, venue v 
+            where e.venueid = v.venueid 
+            and v.venuename = '$venuename';";
+
+            // Execute the query
+            $result = mysqli_query($conn, $sql);
+
+            // Check if any rows were returned
+            if (mysqli_num_rows($result) > 0) {
+                // Display the user data in a table
+                echo "<table class='table'>";
+                echo "<thead><tr><th>Event Name</th><th>Venue Name</th></tr></thead>";
+                echo "<tbody>";
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo "<tr>";
+                    echo "<td>" . $row['eventname'] . "</td>";
+                    echo "<td>" . $row['venuename'] . "</td>";
+                    echo "</tr>";
+                }
+                echo "</tbody>";
+                echo "</table>";
+            } else {
+                // Display a message if no rows were returned
+                echo "No data found for venue: $venuename";
+            }
         }
 
         if (isset($_POST['get_all_events_and_venue'])) {
-            // SELECT *
-            // FROM venue v
-            // INNER JOIN event e ON e.venueid = v.venueid;
+            // Run the SQL query to retrieve all user data based on user ID
+            $sql = "SELECT *
+            FROM venue v
+            INNER JOIN event e ON e.venueid = v.venueid;";
+
+            // Execute the query
+            $result = mysqli_query($conn, $sql);
+
+            // Check if any rows were returned
+            if (mysqli_num_rows($result) > 0) {
+                // Display the user data in a table
+                echo "<table class='table'>";
+                echo "<thead><tr><th>Event Name</th><th>Venue Name</th></tr></thead>";
+                echo "<tbody>";
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo "<tr>";
+                    echo "<td>" . $row['eventname'] . "</td>";
+                    echo "<td>" . $row['venuename'] . "</td>";
+                    echo "</tr>";
+                }
+                echo "</tbody>";
+                echo "</table>";
+            }
         }
 
         if (isset($_POST['get_tickets_in_venue'])) {
-            // SELECT SUM(numtickets) as total_tickets
-            // FROM listing l
-            // INNER JOIN event e ON e.eventid = l.eventid
-            // INNER JOIN venue v ON v.venueid = e.venueid
-            // WHERE v.venuename = 'venue name';
+
+            $venuename = $_POST['venuename'];
+
+            // Run the SQL query to retrieve all user data based on user ID
+            $sql = "SELECT SUM(numtickets) as total_tickets,
+            v.venuename as venue_name
+            FROM listing l
+            INNER JOIN event e ON e.eventid = l.eventid
+            INNER JOIN venue v ON v.venueid = e.venueid
+            WHERE v.venuename = '$venuename';";
+
+            // Execute the query
+            $result = mysqli_query($conn, $sql);
+
+            // Check if any rows were returned
+            if (mysqli_num_rows($result) > 0) {
+                // Display the user data in a table
+                echo "<table class='table'>";
+                echo "<thead><tr><th>Tickets</th><th>Venue Name</th></tr></thead>";
+                echo "<tbody>";
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo "<tr>";
+                    echo "<td>" . $row['total_tickets'] . "</td>";
+                    echo "<td>" . $row['venue_name'] . "</td>";
+                    echo "</tr>";
+                }
+                echo "</tbody>";
+                echo "</table>";
+            } else {
+                // Display a message if no rows were returned
+                echo "No data found for venue: $venuename";
+            }
         }
 
         $end_time = microtime(true);

@@ -25,7 +25,74 @@
         echo "<br>";
         $start_time = microtime(true);
 
-        if (isset($_POST['update_price'])) {
+        // Check if the form has been submitted
+        if (isset($_POST['create_new_user'])) {
+            // Get the form data
+            $username = $_POST["username"];
+            $firstname = $_POST["firstname"];
+            $lastname = $_POST["lastname"];
+            $city = $_POST["city"];
+            $state = $_POST["state"];
+            $email = $_POST["email"];
+            $phone = $_POST["phone"];
+            $likesports = isset($_POST["likesports"]) ? 1 : 0;
+            $liketheatre = isset($_POST["liketheatre"]) ? 1 : 0;
+            $likeconcerts = isset($_POST["likeconcerts"]) ? 1 : 0;
+            $likejazz = isset($_POST["likejazz"]) ? 1 : 0;
+            $likeclassical = isset($_POST["likeclassical"]) ? 1 : 0;
+            $likeopera = isset($_POST["likeopera"]) ? 1 : 0;
+            $likerock = isset($_POST["likerock"]) ? 1 : 0;
+            $likevegas = isset($_POST["likevegas"]) ? 1 : 0;
+            $likebroadway = isset($_POST["likebroadway"]) ? 1 : 0;
+            $likemusicals = isset($_POST["likemusicals"]) ? 1 : 0;
+
+            // Prepare the SQL statement
+            $sql = "INSERT INTO users ( username, firstname, lastname, city, state, email, phone, likesports, liketheatre, likeconcerts, likejazz, likeclassical, likeopera, likerock, likevegas, likebroadway, likemusicals) 
+            VALUES ('$username', '$firstname', '$lastname', '$city', '$state', '$email', '$phone', '$likesports', '$liketheatre', '$likeconcerts', '$likejazz', '$likeclassical', '$likeopera', '$likerock', '$likevegas', '$likebroadway', '$likemusicals')";
+
+            // Execute the SQL statement
+            if (mysqli_query($conn, $sql)) {
+                echo "New record created successfully";
+            } else {
+                echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+            }
+        }
+
+        if (isset($_POST['create_new_listing'])) {
+            $sellername = $_POST['sellername'];
+            $eventname = $_POST['eventname'];
+            $date = $_POST['date'];
+            $numtickets = $_POST['numtickets'];
+            $priceperticket = $_POST['priceperticket'];
+            $totalprice = $_POST['totalprice'];
+            $listtime = $_POST['listtime'];
+
+            // Insert the new listing into the database
+            $query = "INSERT INTO listing (sellerid, eventid, dateid, numtickets, priceperticket, totalprice, listtime)
+                        VALUES ((SELECT userid FROM users 
+                                WHERE username = '$sellername'),
+                                (SELECT eventid FROM event 
+                                WHERE eventname = '$eventname' 
+                                AND dateid = (SELECT dateid 
+                                                FROM date 
+                                                WHERE caldate = '$date')),
+                                (SELECT dateid FROM date 
+                                WHERE caldate = '$date'),
+                                '$numtickets',
+                                '$priceperticket',
+                                '$totalprice',
+                                '$listtime')";
+            $result = $mysqli->query($query);
+
+            // Check if the insert was successful
+            if ($result) {
+                echo "Listing created successfully!";
+            } else {
+                echo "Error: " . $mysqli->error;
+            }
+        }
+
+        if (isset($_POST['create_new_venue'])) {
             // Get form data
             $venuename = $_POST['venuename'];
             $venuecity = $_POST['venuecity'];
